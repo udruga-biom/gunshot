@@ -1,10 +1,12 @@
 #include <SD.h>
+#include <Wire.h>
+#include "RTClib.h"
 
 /******************************************************************************
   gunshot.ino
-  Gunshot detector
+  Gunshot detector w/RTC & microSD output
   mzec @ BIOM
-  2017-03-23
+  2017-09-03
   code available at:
     https://github.com/udruga-biom/gunshot
   based on:
@@ -16,10 +18,10 @@
 #define PIN_ANALOG_IN A0
 
 // parameters, change for different output
-const int numReadings = 25; // smoothing window size
+const int numReadings = 30; // smoothing window size
 const int treshold = 25; // sensitivity of detector
 const int numDelay = 10; // delay between readings
-const int eventDuration = 1000; // delay after sound detection
+const int eventDuration = 200; // delay after sound detection
 
 const uint8_t BUFFER_SIZE = 25;
 char fileName[] = "demoFile.txt"; // SD library only supports up to 8.3 names
@@ -40,6 +42,9 @@ int total = 0;
 int average = 0;
 unsigned long event = 0;
 
+// RTC stuff
+RTC_DS3231 rtc;
+
 void setup()
 {
   for (int thisReading = 0; thisReading < numReadings; thisReading++) {
@@ -49,7 +54,7 @@ void setup()
   Serial.begin(9600);
 
   //  Configure LED pin as output
-  pinMode(PIN_LED_OUT, OUTPUT);
+  // pinMode(PIN_LED_OUT, OUTPUT);
 
   // Display status
   Serial.println("Initialized");
@@ -65,12 +70,19 @@ void setup()
     return;
   }
   Serial.println("card initialized.");
+
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    while (1);
+  }
 }
 
 void loop()
 {
   int value;
   String valueString;
+  String dateStamp;
+  String timeStamp;
 
   // read the envelope input
   value = analogRead(PIN_ANALOG_IN);
@@ -97,7 +109,10 @@ void loop()
   if (value - average > treshold) {
     if (millis() - event > eventDuration) {
       event = millis();
-      valueString = String(value) + " " + String(millis());
+      DateTime now = rtc.now();
+      dateStamp = String(now.year()) + "-" + String(now.month()) + "-" + String(now.day());
+      timeStamp = String(now.hour()) + ":" + String(now.minute()) + ":" + String(now.second());
+      valueString = String(value) + " " + dateStamp + " " + timeStamp;
       sendToSD(valueString);
     }
 
@@ -106,11 +121,11 @@ void loop()
 //  Serial.print(" ");
 //  Serial.println(value);
 
-  if (millis() - event < eventDuration) {
-    digitalWrite(PIN_LED_OUT, HIGH);
-  } else {
-    digitalWrite(PIN_LED_OUT, LOW);
-  }
+//  if (millis() - event < eventDuration) {
+//    digitalWrite(PIN_LED_OUT, HIGH);
+//  } else {
+//    digitalWrite(PIN_LED_OUT, LOW);
+//  }
   
   // pause
   delay(numDelay);

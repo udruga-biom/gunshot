@@ -19,7 +19,7 @@
 const int numReadings = 30; // smoothing window size
 const int treshold = 25; // sensitivity of detector
 const int numDelay = 10; // delay between readings
-const int eventDuration = 1000; // delay after sound detection
+const int eventDuration = 200; // delay after sound detection
 
 int readings[numReadings];
 int readIndex = 0;
