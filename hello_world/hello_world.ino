@@ -5,7 +5,7 @@
   2018-03-20
  ******************************************************************************/
 
-// this bit gets run only once after power on
+// this part gets run only once after power on
 void setup()
 {
   // initialize the serial output
@@ -13,7 +13,7 @@ void setup()
   Serial.begin(9600);
 }
 
-// this bit runs over and over for as long as there is power
+// this part runs over and over for as long as there is power
 void loop()
 {
   String output = "Ants are important!";
