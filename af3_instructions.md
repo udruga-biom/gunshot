@@ -1,21 +1,5 @@
 # AF3 Gunshot detector workshop - instructions
 
-## Useful links
-
-### Microcontroller board
-
-https://learn.adafruit.com/introducting-itsy-bitsy-32u4?view=all
-
-### Microphone & Sound detector
-
-https://learn.sparkfun.com/tutorials/sound-detector-hookup-guide
-
-### Real-time clock
-
-https://www.velleman.eu/downloads/29/vma301_a4v01.pdf
-
-https://github.com/msparks/arduino-ds1302
-
 ## Instructions
 
 ### Installing the Arduino IDE - Blinking lights
@@ -81,3 +65,19 @@ The code for the `blink` example is well documented. Try reading it and figuring
  22. Open the serial plotter and try making some noise. What is the meaning of each line?
 
  23. Finally, try tweaking all the parameters to best detect sharp noises, such as clapping. Pair off with another team, without looking at their parameters (`numDelay`, `threshold`, `eventDuration`, `numreadings`). Try detecting the same noise from the same distance. Whoever detects the further noise without false positives is the winner.
+
+## Useful links
+
+### Microcontroller board
+
+https://learn.adafruit.com/introducting-itsy-bitsy-32u4?view=all
+
+### Microphone & Sound detector
+
+https://learn.sparkfun.com/tutorials/sound-detector-hookup-guide
+
+### Real-time clock
+
+https://www.velleman.eu/downloads/29/vma301_a4v01.pdf
+
+https://github.com/msparks/arduino-ds1302
